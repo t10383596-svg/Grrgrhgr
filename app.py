@@ -689,11 +689,7 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username', '')
         password = request.form.get('password', '')
-        captcha = request.form.get('captcha', '')
         ip = request.remote_addr
-        # تم تعطيل الكابتشا وفحص البريوت فورس مؤقتاً
-        # if captcha != session.get('captcha'):
-        #     return "Captcha incorrect", 400
         # allowed, msg = check_brute_force(ip, username)
         # if not allowed:
         #     return msg, 401
@@ -708,8 +704,7 @@ def login():
         session['role'] = users[username]['role']
         # regenerate_session() # تعطيل مؤقت لحل مشكلة الدخول
         return redirect(url_for('dashboard'))
-    session['captcha'] = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-    return render_template('login.html', captcha=session['captcha'], csrf_token=generate_csrf_token())
+    return render_template('login.html', csrf_token=generate_csrf_token())
 
 @app.route('/api/download_file/<server_id>/<filename>')
 def download_file(server_id, filename):
@@ -1160,4 +1155,4 @@ if __name__ == '__main__':
     os.makedirs(os.path.join(BASE_DIR, 'servers'), exist_ok=True)
     print("=" * 60)
     print("=" * 60)
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5001)
