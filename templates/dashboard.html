@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - 𝑽𝑷𝑺 𝑶𝑴𝑨𝑹</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0d1117;
+            font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 80px 24px 40px;
+        }
+        
+        /* ========== NAVBAR مثل Terminal ========== */
+        .navbar {
+            background: rgba(13,17,23,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1e2a3a;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            background: #1e2a3a;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .logo-icon:hover {
+            background: #2d9cdb;
+            transform: scale(1.05);
+        }
+        
+        .logo-text {
+            color: #e0e0e0;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .logo-text span {
+            color: #2d9cdb;
+        }
+        
+        .navbar-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            border: 1px solid #2d3748;
+            padding: 6px 14px;
+            border-radius: 8px;
+            color: #cbd5e0;
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background: #1e2a3a;
+            border-color: #2d9cdb;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* ========== عنوان New Server ========== */
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2d9cdb;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(45,156,219,0.3);
+            display: inline-block;
+        }
+        
+        /* ========== Create Server Card ========== */
+        .create-card {
+            background: #161b22;
+            border: 1px solid #1e2a3a;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .create-card:hover {
+            border-color: #2d9cdb;
+            transform: translateY(-2px);
+        }
+        
+        .create-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .create-form input {
+            flex: 2;
+            background: #0d1117;
+            border: 1px solid #1e2a3a;
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: white;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .create-form input:focus {
+            border-color: #2d9cdb;
+            box-shadow: 0 0 10px rgba(45,156,219,0.2);
+        }
+        
+        .create-form input::placeholder {
+            color: #8b9bb0;
+        }
+        
+        .create-form button {
+            flex: 1;
+            background: linear-gradient(135deg, #2d9cdb, #1a6fa3);
+            border: none;
+            border-radius: 10px;
+            padding: 14px 24px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .create-form button:hover {
+            background: linear-gradient(135deg, #3dadf0, #2d9cdb);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45,156,219,0.3);
+        }
+        
+        /* ========== My Servers Section ========== */
+        .servers-section {
+            margin-top: 20px;
+        }
+        
+        .servers-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .servers-title span {
+            background: #2d9cdb;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #0a1628;
+        }
+        
+        .servers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        
+        .server-card {
+            background: #161b22;
+            border: 1px solid #1e2a3a;
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .server-card:hover {
+            border-color: #2d9cdb;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        
+        .server-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #1e2a3a;
+        }
+        
+        .server-card-header .server-name {
+            color: #2d9cdb;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .server-status-badge {
+            font-size: 0.65rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .status-running {
+            background: rgba(46,204,113,0.2);
+            color: #2ecc71;
+            border: 1px solid rgba(46,204,113,0.3);
+        }
+        
+        .status-stopped {
+            background: rgba(231,76,60,0.2);
+            color: #e74c3c;
+            border: 1px solid rgba(231,76,60,0.3);
+        }
+        
+        .server-specs {
+            margin: 15px 0;
+        }
+        
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(45,156,219,0.1);
+        }
+        
+        .spec-label {
+            color: #8b9bb0;
+            font-size: 0.7rem;
+        }
+        
+        .spec-value {
+            color: #00ffaa;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .server-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 10px;
+        }
+        
+        .server-open-btn {
+            flex: 2;
+            background: #2d9cdb;
+            border: none;
+            border-radius: 8px;
+            padding: 8px;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .server-open-btn:hover {
+            background: #3dadf0;
+            transform: scale(1.02);
+        }
+        
+        .server-delete-btn {
+            flex: 1;
+            background: rgba(231,76,60,0.1);
+            border: 1px solid rgba(231,76,60,0.3);
+            border-radius: 8px;
+            padding: 8px;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .server-delete-btn:hover {
+            background: #e74c3c;
+            color: white;
+            transform: scale(1.02);
+        }
+        
+        .no-servers {
+            text-align: center;
+            padding: 60px;
+            background: #161b22;
+            border-radius: 16px;
+            border: 1px solid #1e2a3a;
+            color: #8b9bb0;
+        }
+        
+        /* Footer */
+        .footer {
+            background: #0d1117;
+            border-top: 1px solid #1e2a3a;
+            padding: 15px 24px;
+            text-align: center;
+            color: #8b9bb0;
+            font-size: 0.65rem;
+            margin-top: 40px;
+        }
+        
+        .footer a {
+            color: #2d9cdb;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            color: #4fc3f7;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e2a3a;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d9cdb;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 700px) {
+            .container {
+                padding: 70px 16px 30px;
+            }
+            .create-form {
+                flex-direction: column;
+            }
+            .servers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <div class="logo-icon">🚀</div>
+            <div class="logo-text"><span>Host X</span> Server</div>
+        </div>
+        <div class="navbar-actions">
+            <a href="/logout" class="nav-btn">🚪 Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- New Server Section -->
+        {% if role == 'admin' %}
+        <div class="section-title"> 👤 إنشاء حساب جديد </div>
+        <div class="create-card" style="border: 2px solid #2d9cdb; box-shadow: 0 0 20px rgba(45,156,219,0.2);">
+            <form class="create-form" method="POST" action="/admin/add_user">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; width: 100%;">
+                    <input type="text" name="username" placeholder="👤 اسم المستخدم" required style="flex: 1;">
+                    <input type="text" name="password" placeholder="🔒 كلمة السر" required style="flex: 1;">
+                    <input type="number" name="days" placeholder="📅 عدد الأيام" required style="flex: 1;">
+                    <button type="submit" style="flex: 1; min-width: 150px;">🚀 إنشاء الحساب</button>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        <div class="section-title"> New Server </div>
+        <div class="create-card">
+            <form class="create-form" method="POST" action="/create_server">
+                <input type="text" name="server_name" placeholder="Enter server name..." required>
+                <button type="submit"> Create Server</button>
+            </form>
+        </div>
+        {% endif %}
+        
+        <!-- My Servers Section -->
+        <div class="servers-section">
+            <div class="servers-title">
+                📁 My Servers
+                <span>{{ servers_count }}</span>
+            </div>
+            
+            <div class="servers-grid">
+                {% for sid, server in user_servers.items() %}
+                <div class="server-card">
+                    <div class="server-card-header">
+                        <div class="server-name">{{ server.name }}</div>
+                        <div class="server-status-badge status-{{ server.status }}">
+                            {{ server.status.upper() }}
+                        </div>
+                    </div>
+                    <div class="server-specs">
+                        <div class="spec-row">
+                            <span class="spec-label">🖥️ CPU Type</span>
+                            <span class="spec-value">{{ server.cpu_type }}</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">⚡ CPU Speed</span>
+                            <span class="spec-value">{{ server.cpu_speed }} GHz</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">🧠 RAM</span>
+                            <span class="spec-value">{{ server.ram }}</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">💾 SSD Storage</span>
+                            <span class="spec-value">{{ server.storage }}</span>
+                        </div>
+                        <div class="spec-row">
+                            <span class="spec-label">⚙️ Cores</span>
+                            <span class="spec-value">{{ server.cores }} Cores</span>
+                        </div>
+                    </div>
+                    <div class="server-actions">
+                        <a href="/terminal/{{ sid }}" class="server-open-btn"> Open Terminal</a>
+                        <button class="server-delete-btn" onclick="deleteServer('{{ sid }}', '{{ server.name }}')"> Delete</button>
+                    </div>
+                </div>
+                {% else %}
+                <div class="no-servers">
+                    📂 No servers yet<br>Create your first server above!
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>𝑽𝑷𝑺 𝑶𝑴𝑨𝑹 ® © 2025 - 2026 | Secure Cloud Hosting Platform</p>
+    </div>
+    
+    <script>
+        function deleteServer(serverId, serverName) {
+            if(confirm(`⚠️ Delete server "${serverName}"?\n\nAll files and data will be permanently lost!`)) {
+                fetch(`/api/delete_server/${serverId}`, {method: 'DELETE'})
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.success) {
+                            alert('✅ Server deleted successfully');
+                            location.reload();
+                        } else {
+                            alert('❌ Failed to delete server');
+                        }
+                    })
+                    .catch(err => alert('❌ Error deleting server'));
+            }
+        }
+    </script>
+</body>
+</html>

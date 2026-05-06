@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>𝑽𝑷𝑺 𝑶𝑴𝑨𝑹 - Sign In</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a1628 0%, #0a1a3a 50%, #0b0f2a 100%);
+            font-family: 'Segoe UI', 'Poppins', 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+        }
+        
+        /* تحسين الخط العام */
+        body, input, button {
+            font-family: 'Segoe UI', 'Poppins', 'Arial', sans-serif;
+        }
+        
+        /* Animated background */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0,100,255,0.08) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 450px;
+            padding: 20px;
+            z-index: 1;
+        }
+        
+        .login-card {
+            background: rgba(8, 18, 38, 0.92);
+            backdrop-filter: blur(15px);
+            padding: 45px;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
+        
+        .login-card:hover {
+            border-color: rgba(0, 150, 255, 0.6);
+            box-shadow: 0 0 30px rgba(0,100,255,0.15);
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #66ccff, #3399ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 2px;
+        }
+        
+        .sub-logo {
+            font-size: 0.7rem;
+            color: #66ccff;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+        
+        .title {
+            text-align: center;
+            margin: 25px 0 20px 0;
+        }
+        
+        .title h2 {
+            color: #66ccff;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        
+        .title p {
+            color: #88ccff;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+        
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            color: #88ccff;
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            background: #0a1225;
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: #3399ff;
+            background: #0e1830;
+            box-shadow: 0 0 10px rgba(51,153,255,0.2);
+        }
+        
+        .form-group input::placeholder {
+            color: #4466aa;
+            font-size: 0.85rem;
+        }
+        
+        /* Captcha */
+        .captcha-box {
+            background: #0a1225;
+            text-align: center;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            letter-spacing: 10px;
+            color: #66ccff;
+            font-family: 'Courier New', monospace;
+            border: 1px solid rgba(0,150,255,0.3);
+            margin-bottom: 15px;
+        }
+        
+        /* Button */
+        .signin-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #3399ff, #0066cc);
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #ffffff;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        
+        .signin-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(0,100,255,0.4);
+            background: linear-gradient(135deg, #44aaff, #0077dd);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.7rem;
+            color: #5588aa;
+        }
+        
+        /* Responsive */
+        @media (max-width: 500px) {
+            .login-card {
+                padding: 30px;
+            }
+            .logo {
+                font-size: 2rem;
+            }
+            .captcha-box {
+                font-size: 1.3rem;
+                letter-spacing: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-card">
+            <div class="header">
+                <div class="logo"><img src="https://iili.io/BL7bG5l.png" alt="𝑽𝑷𝑺 𝑶𝑴𝑨𝑹" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #3399ff; margin-bottom: 15px; box-shadow: 0 0 20px rgba(51,153,255,0.5);"><br>𝑽𝑷𝑺 𝑶𝑴𝑨𝑹</div>
+            </div>
+            
+            <div class="title">
+                <h2>𝑽𝑷𝑺 𝑶𝑴𝑨𝑹</h2>
+                <p>Sign in to your account</p>
+            </div>
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label>USERNAME</label>
+                    <input type="text" name="username" placeholder="Enter username" required autocomplete="off">
+                </div>
+                
+                <div class="form-group">
+                    <label>PASSWORD</label>
+                    <input type="password" name="password" placeholder="Enter password" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>SECURITY VERIFICATION</label>
+                    <div class="captcha-box">{{ captcha }}</div>
+                    <input type="text" name="captcha" placeholder="Enter the code above" required style="margin-top: 10px;">
+                </div>
+                
+                <button type="submit" class="signin-btn">Sign In</button>
+            </form>
+            
+            <div class="footer">
+                <p>© 2026 𝑽𝑷𝑺 𝑶𝑴𝑨𝑹 - Secure Cloud Hosting</p>
+                <a href="https://t.me/RLH33" target="_blank" style="display: inline-block; margin-top: 15px; padding: 10px 25px; background: linear-gradient(135deg, #0088cc, #005588); color: white; text-decoration: none; border-radius: 25px; font-weight: bold; font-size: 0.9rem; box-shadow: 0 4px 15px rgba(0,136,204,0.3); transition: 0.3s;">👨‍💻 المطور</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

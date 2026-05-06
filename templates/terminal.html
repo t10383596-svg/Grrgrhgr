@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Terminal - 𝑽𝑷𝑺 𝑶𝑴𝑨𝑹</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #0d1117;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* ========== NAVBAR مثل الصورة ========== */
+        .navbar {
+            background: rgba(13,17,23,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1e2a3a;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .server-icon {
+            background: #1e2a3a;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+        
+        .server-icon:hover {
+            transform: scale(1.05);
+            background: #2d9cdb;
+        }
+        
+        .server-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .server-name {
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .server-name span {
+            color: #2d9cdb;
+        }
+        
+        .server-status {
+            font-size: 0.7rem;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+        
+        /* حالة OFFLINE */
+        .status-offline {
+            color: #e74c3c;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .status-offline::before {
+            content: '●';
+            color: #e74c3c;
+            margin-right: 6px;
+            font-size: 0.7rem;
+            animation: offlinePulse 2s infinite;
+        }
+        
+        @keyframes offlinePulse {
+            0%, 100% { opacity: 0.5; text-shadow: 0 0 0px #e74c3c; }
+            50% { opacity: 1; text-shadow: 0 0 3px #e74c3c; }
+        }
+        
+        /* حالة ONLINE */
+        .status-online {
+            color: #2ecc71;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .status-online::before {
+            content: '●';
+            color: #2ecc71;
+            margin-right: 6px;
+            font-size: 0.7rem;
+            animation: onlinePulse 1.5s infinite;
+        }
+        
+        @keyframes onlinePulse {
+            0%, 100% { opacity: 1; text-shadow: 0 0 0px #2ecc71; }
+            50% { opacity: 0.7; text-shadow: 0 0 5px #2ecc71; }
+        }
+        
+        .navbar-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-btn {
+            background: transparent;
+            border: 1px solid #2d3748;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            color: #cbd5e0;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .dropdown-btn:hover {
+            background: #1e2a3a;
+            border-color: #2d9cdb;
+            color: white;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            left: 0; /* تغيير من right إلى left لتفتح للداخل */
+            top: 100%;
+            background: rgba(22, 27, 34, 0.95);
+            backdrop-filter: blur(10px);
+            min-width: 220px;
+            border-radius: 15px;
+            border: 1px solid rgba(45, 156, 219, 0.4);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+            z-index: 1000;
+            margin-top: 12px;
+            overflow: hidden;
+            padding: 8px 0;
+        }
+        
+        .dropdown-content.show {
+            display: block;
+            animation: fadeIn 0.15s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dropdown-item {
+            padding: 12px 20px;
+            color: #cbd5e0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(30, 42, 58, 0.5);
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-item:hover {
+            background: linear-gradient(90deg, rgba(45, 156, 219, 0.2), transparent);
+            color: #4fc3f7;
+            padding-left: 25px;
+        }
+        
+        .dropdown-item .icon {
+            font-size: 0.9rem;
+            width: 22px;
+            text-align: center;
+        }
+        
+        .dropdown-divider {
+            height: 1px;
+            background: #1e2a3a;
+            margin: 0;
+        }
+        
+        .dropdown-header {
+            padding: 10px 20px;
+            color: #ffaa66;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: rgba(13, 17, 23, 0.8);
+            border-bottom: 1px solid rgba(45, 156, 219, 0.2);
+            margin-bottom: 5px;
+        }
+        
+        .nav-btn {
+            background: transparent;
+            border: 1px solid #2d3748;
+            padding: 6px 14px;
+            border-radius: 8px;
+            color: #cbd5e0;
+            text-decoration: none;
+            font-size: 0.75rem;
+            transition: 0.2s;
+        }
+        
+        .nav-btn:hover {
+            background: #1e2a3a;
+            border-color: #2d9cdb;
+            color: white;
+        }
+        
+        /* Stats Dropdown */
+        .stats-dropdown {
+            background: #0d1117;
+            border-bottom: 1px solid #1e2a3a;
+        }
+        
+        .stats-header {
+            padding: 10px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #8b9bb0;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        
+        .stats-header:hover {
+            background: #161b22;
+        }
+        
+        .stats-header .arrow {
+            transition: transform 0.2s;
+            font-size: 0.7rem;
+        }
+        
+        .stats-header.open .arrow {
+            transform: rotate(180deg);
+        }
+        
+        .stats-content {
+            display: none;
+            padding: 20px 24px;
+            background: #0a0e14;
+            border-top: 1px solid #1e2a3a;
+        }
+        
+        .stats-content.show {
+            display: block;
+        }
+        
+        /* CPU Info Row */
+        .cpu-info-row {
+            background: #0d1117;
+            padding: 10px 24px;
+            border-bottom: 1px solid #1e2a3a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+        
+        .cpu-info-left {
+            color: #8b9bb0;
+        }
+        
+        .cpu-info-right {
+            color: #2d9cdb;
+            font-weight: 600;
+            animation: textGlow 2s infinite;
+        }
+        
+        @keyframes textGlow {
+            0%, 100% { text-shadow: 0 0 2px #2d9cdb; }
+            50% { text-shadow: 0 0 8px #2d9cdb; }
+        }
+        
+        /* System Info Grid */
+        .system-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #1e2a3a;
+        }
+        
+        .info-card {
+            background: #161b22;
+            border-radius: 10px;
+            padding: 12px 14px;
+            border-left: 3px solid #2d9cdb;
+            transition: all 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateX(5px);
+            border-left-color: #ffaa33;
+        }
+        
+        .info-label {
+            color: #8b9bb0;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .info-value {
+            color: #e0e0e0;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-item:hover {
+            transform: scale(1.02);
+        }
+        
+        .stat-label {
+            color: #8b9bb0;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-value {
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .stat-value.updated {
+            animation: valueChange 0.3s ease;
+        }
+        
+        @keyframes valueChange {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); color: #fff; }
+            100% { transform: scale(1); }
+        }
+        
+        .stat-progress {
+            height: 6px;
+            background: #1e2a3a;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        
+        .stat-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s;
+        }
+        
+        /* تأثيرات SSD و GPU */
+        .fill-cpu {
+            background: linear-gradient(90deg, #2d9cdb, #4fc3f7, #2d9cdb);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite, cpuGlow 2s infinite;
+        }
+        
+        .fill-ram {
+            background: linear-gradient(90deg, #2ecc71, #58e89a, #2ecc71);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite, ramPulse 2s infinite;
+        }
+        
+        @keyframes ssdPulse {
+            0% { box-shadow: 0 0 2px rgba(243,156,18,0.3); opacity: 0.9; }
+            50% { box-shadow: 0 0 15px rgba(243,156,18,0.8); opacity: 1; }
+            100% { box-shadow: 0 0 2px rgba(243,156,18,0.3); opacity: 0.9; }
+        }
+        
+        .fill-disk {
+            background: linear-gradient(90deg, #f39c12, #f7c548, #f39c12);
+            background-size: 200% 100%;
+            animation: gradientShift 4s ease infinite, ssdPulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .fill-disk::after {
+            content: '⚡';
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 8px;
+            opacity: 0;
+            animation: ssdSpark 1.5s infinite;
+        }
+        
+        @keyframes ssdSpark {
+            0%, 100% { opacity: 0; right: 5px; }
+            50% { opacity: 1; right: 10px; text-shadow: 0 0 5px #f39c12; }
+        }
+        
+        @keyframes gpuPulse {
+            0% { box-shadow: 0 0 5px rgba(155,89,182,0.3); background-position: 0% 50%; }
+            25% { box-shadow: 0 0 20px rgba(155,89,182,0.9); }
+            50% { box-shadow: 0 0 5px rgba(155,89,182,0.3); background-position: 100% 50%; }
+            75% { box-shadow: 0 0 20px rgba(155,89,182,0.9); }
+            100% { box-shadow: 0 0 5px rgba(155,89,182,0.3); background-position: 0% 50%; }
+        }
+        
+        .fill-network {
+            background: linear-gradient(90deg, #9b59b6, #bb8be0, #9b59b6, #bb8be0);
+            background-size: 300% 100%;
+            animation: gradientShift 2s ease infinite, gpuPulse 2s infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes cpuGlow {
+            0%, 100% { box-shadow: 0 0 5px rgba(45,156,219,0.3); }
+            50% { box-shadow: 0 0 15px rgba(45,156,219,0.8); }
+        }
+        
+        @keyframes ramPulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; box-shadow: 0 0 8px rgba(46,204,113,0.5); }
+        }
+        
+        .network-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #1e2a3a;
+        }
+        
+        /* User Info Bar */
+        .user-info-bar {
+            background: #0d1117;
+            border-bottom: 1px solid #1e2a3a;
+            padding: 10px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .user-stats {
+            display: flex;
+            gap: 25px;
+            font-size: 0.75rem;
+        }
+        
+        .user-stat {
+            color: #8b9bb0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .user-stat:hover {
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        
+        .user-stat span {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        /* Terminal Linux Style */
+        .terminal-prompt {
+            color: #ffaa33;
+            font-weight: bold;
+            animation: promptGlow 2s infinite;
+        }
+        
+        @keyframes promptGlow {
+            0%, 100% { text-shadow: 0 0 2px #ffaa33; }
+            50% { text-shadow: 0 0 8px #ffaa33; }
+        }
+        
+        /* File Browser */
+        .file-browser {
+            padding: 20px 24px;
+        }
+        
+        .breadcrumb {
+            background: #161b22;
+            padding: 10px 16px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #8b9bb0;
+            border: 1px solid #1e2a3a;
+            transition: all 0.3s ease;
+        }
+        
+        .breadcrumb:hover {
+            border-color: #2d9cdb;
+        }
+        
+        .breadcrumb span {
+            color: #2d9cdb;
+        }
+        
+        .directory-empty {
+            text-align: center;
+            padding: 50px 20px;
+            color: #8b9bb0;
+            background: #161b22;
+            border-radius: 12px;
+            border: 1px solid #1e2a3a;
+            transition: all 0.3s ease;
+        }
+        
+        .directory-empty:hover {
+            border-color: #2d9cdb;
+            transform: scale(1.01);
+        }
+        
+        .directory-empty .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        /* ========== FILE ACTION MENU (3 DOTS) ========== */
+        .file-item {
+            position: relative;
+        }
+        
+        .file-menu {
+            position: relative;
+        }
+        
+        .file-menu-btn {
+            background: transparent;
+            border: none;
+            color: #8b9bb0;
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        
+        .file-menu-btn:hover {
+            background: #1e2a3a;
+            color: white;
+        }
+        
+        .file-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background: #161b22;
+            min-width: 150px;
+            border-radius: 8px;
+            border: 1px solid #1e2a3a;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            z-index: 100;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .file-dropdown.show {
+            display: block;
+            animation: fadeIn 0.15s ease;
+        }
+        
+        .file-dropdown-item {
+            padding: 8px 14px;
+            color: #cbd5e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.7rem;
+            transition: 0.2s;
+            cursor: pointer;
+            border-bottom: 1px solid #1e2a3a;
+        }
+        
+        .file-dropdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .file-dropdown-item:hover {
+            background: #1e2a3a;
+            color: white;
+        }
+        
+        .file-dropdown-item .icon {
+            font-size: 0.8rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .file-dropdown-divider {
+            height: 1px;
+            background: #1e2a3a;
+            margin: 0;
+        }
+        
+        /* Upload Section */
+        .upload-section {
+            padding: 0 24px 20px 24px;
+        }
+        
+        .upload-box {
+            background: #161b22;
+            border: 1px dashed #2d3748;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-box:hover {
+            border-color: #2d9cdb;
+            transform: translateY(-2px);
+        }
+        
+        .upload-box input {
+            display: none;
+        }
+        
+        .upload-label {
+            background: #2d9cdb;
+            color: white;
+            padding: 8px 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-label:hover {
+            background: #2489c4;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(45,156,219,0.4);
+        }
+        
+        .upload-box p {
+            font-size: 0.65rem;
+            margin-top: 10px;
+            color: #8b9bb0;
+        }
+        
+        /* Terminal Section */
+        .terminal-section {
+            padding: 0 24px 20px 24px;
+        }
+        
+        .terminal-header {
+            background: #161b22;
+            padding: 10px 16px;
+            border-radius: 8px 8px 0 0;
+            border: 1px solid #1e2a3a;
+            border-bottom: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .terminal-header span {
+            color: #8b9bb0;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .terminal-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .terminal-btn {
+            background: transparent;
+            border: none;
+            color: #8b9bb0;
+            cursor: pointer;
+            font-size: 0.65rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .terminal-btn:hover {
+            background: #1e2a3a;
+            color: white;
+            transform: scale(1.05);
+        }
+        
+        .terminal-log {
+            background: #0a0e14;
+            border: 1px solid #1e2a3a;
+            border-radius: 0 0 8px 8px;
+            height: 280px;
+            overflow-y: auto;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.75rem;
+        }
+        
+        .log-line {
+            color: #00ffaa;
+            padding: 4px 0;
+            border-bottom: 1px solid #1e2a3a;
+            font-family: monospace;
+            transition: all 0.2s ease;
+        }
+        
+        .log-line:hover {
+            background: rgba(0,255,170,0.05);
+            padding-left: 5px;
+        }
+        
+        .log-line.prompt {
+            color: #ffaa33;
+        }
+        
+        .log-error {
+            color: #ff6666;
+            animation: errorBlink 1s infinite;
+        }
+        
+        @keyframes errorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; text-shadow: 0 0 5px #ff6666; }
+        }
+        
+        .log-success {
+            color: #2ecc71;
+        }
+        
+        /* Control Buttons */
+        .control-buttons {
+            padding: 0 24px 20px 24px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .control-btn {
+            padding: 10px 28px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+        
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .control-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .control-btn-start {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46,204,113,0.3);
+        }
+        
+        .control-btn-start:hover {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(46,204,113,0.5);
+        }
+        
+        .control-btn-stop {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            box-shadow: 0 4px 15px rgba(231,76,60,0.3);
+        }
+        
+        .control-btn-stop:hover {
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(231,76,60,0.5);
+        }
+        
+        .control-btn-restart {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            box-shadow: 0 4px 15px rgba(243,156,18,0.3);
+        }
+        
+        .control-btn-restart:hover {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(243,156,18,0.5);
+        }
+        
+        .control-btn-clear {
+            background: linear-gradient(135deg, #7f8c8d, #6c7a7b);
+            color: white;
+            box-shadow: 0 4px 15px rgba(127,140,141,0.3);
+        }
+        
+        .control-btn-clear:hover {
+            background: linear-gradient(135deg, #6c7a7b, #7f8c8d);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(127,140,141,0.5);
+        }
+        
+        /* Edit Modal */
+        .edit-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .edit-modal.show {
+            display: flex;
+        }
+        
+        .edit-modal-content {
+            background: #161b22;
+            border-radius: 12px;
+            padding: 25px;
+            width: 85%;
+            max-width: 900px;
+            border: 1px solid #2d9cdb;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        .edit-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #1e2a3a;
+        }
+        
+        .edit-modal-header h3 {
+            color: #2d9cdb;
+            font-size: 1.1rem;
+        }
+        
+        .edit-file-name {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        
+        .edit-file-name input {
+            flex: 1;
+            background: #0d1117;
+            border: 1px solid #1e2a3a;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 0.85rem;
+        }
+        
+        .edit-file-name button {
+            background: #f39c12;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .edit-file-name button:hover {
+            background: #e67e22;
+            transform: scale(1.02);
+        }
+        
+        .edit-file-content textarea {
+            width: 100%;
+            height: 400px;
+            background: #0d1117;
+            border: 1px solid #1e2a3a;
+            border-radius: 8px;
+            padding: 12px;
+            color: #00ffaa;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
+            resize: vertical;
+        }
+        
+        .edit-file-content textarea:focus {
+            outline: none;
+            border-color: #2d9cdb;
+        }
+        
+        .edit-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: flex-end;
+        }
+        
+        .edit-actions button {
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        
+        .save-btn {
+            background: #2ecc71;
+            border: none;
+            color: white;
+        }
+        
+        .save-btn:hover {
+            background: #27ae60;
+            transform: scale(1.02);
+        }
+        
+        .cancel-btn {
+            background: #e74c3c;
+            border: none;
+            color: white;
+        }
+        
+        .cancel-btn:hover {
+            background: #c0392b;
+            transform: scale(1.02);
+        }
+        
+        /* Regular Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #161b22;
+            border-radius: 10px;
+            padding: 20px;
+            min-width: 300px;
+            border: 1px solid #2d9cdb;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .modal-content h3 {
+            color: #2d9cdb;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+        
+        .modal-content p {
+            font-size: 0.8rem;
+            margin: 8px 0;
+            color: #cbd5e0;
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            background: #0d1117;
+            border: 1px solid #1e2a3a;
+            border-radius: 5px;
+            color: white;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-content input:focus {
+            border-color: #2d9cdb;
+            outline: none;
+            box-shadow: 0 0 10px rgba(45,156,219,0.3);
+        }
+        
+        .modal-content button {
+            background: #2d9cdb;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-content button:hover {
+            background: #2489c4;
+            transform: scale(1.02);
+        }
+        
+        .close-modal {
+            float: right;
+            cursor: pointer;
+            color: #8b9bb0;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: #ff6666;
+            transform: scale(1.1);
+        }
+        
+        /* Footer */
+        .footer {
+            background: #0d1117;
+            border-top: 1px solid #1e2a3a;
+            padding: 12px 24px;
+            text-align: center;
+            color: #8b9bb0;
+            font-size: 0.65rem;
+            margin-top: 15px;
+        }
+        
+        .footer a {
+            color: #2d9cdb;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer a:hover {
+            color: #ffaa33;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e2a3a;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d9cdb;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffaa33;
+        }
+        
+        @media (max-width: 768px) {
+            .system-info-grid, .stats-grid, .network-stats {
+                grid-template-columns: 1fr;
+            }
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .user-stats {
+                flex-wrap: wrap;
+            }
+            .control-buttons {
+                flex-wrap: wrap;
+            }
+            .edit-modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+            .edit-file-content textarea {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <div class="navbar">
+            <div class="navbar-left">
+                <div class="server-icon">🖥️</div>
+                <div class="server-info">
+                    <div class="server-name"><span id="serverNameDisplay">{{ server_name }}</span></div>
+                    <div class="server-status"><span class="status-{{ status }}" id="serverStatusText">{{ status.upper() }}</span></div>
+                </div>
+            </div>
+            <div class="navbar-actions">
+                <div class="dropdown">
+                    <button class="dropdown-btn" onclick="toggleDropdown()">⋮</button>
+                    <div class="dropdown-content" id="dropdownMenu">
+                        <div class="dropdown-header"> MENU</div>
+                        <div class="dropdown-item" onclick="showUserInfo()"><span class="icon"></span> User Info</div>
+                        <div class="dropdown-item" onclick="showFilesCount()"><span class="icon"></span> My Files</div>
+                        <div class="dropdown-item" onclick="showTimeLeft()"><span class="icon"></span> Time Left</div>
+                        <div class="dropdown-item" onclick="showUpdateCredentials()"><span class="icon"></span> Update Password</div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="window.location.href='/buy'"><span class="icon">🛒</span> Buy Server Pro</div>
+                        {% if role == 'admin' %}
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-header">🔧 ADMIN</div>
+                        <div class="dropdown-item" onclick="window.location.href='/admin'"><span class="icon">🔧</span> Admin Panel</div>
+                        <div class="dropdown-item" onclick="showAdminMonitor()"><span class="icon">📊</span> Monitor Users</div>
+                        {% endif %}
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" onclick="logout()"><span class="icon">🚪</span> Logout</div>
+                    </div>
+                </div>
+                <a href="/dashboard" class="nav-btn">← Dashboard</a>
+            </div>
+        </div>
+        
+        <!-- CPU Info Row -->
+        <div class="cpu-info-row">
+            <div class="cpu-info-left">🖥️ CPU / Speed</div>
+            <div class="cpu-info-right">{{ cpu_type }} @ {{ cpu_speed }} GHz</div>
+        </div>
+        
+        <!-- User Info Bar -->
+        <div class="user-info-bar">
+            <div class="user-stats">
+                <div class="user-stat">👤 <span id="userName">{{ user }}</span></div>
+                <div class="user-stat">📁 <span id="filesCount">0</span> files</div>
+                <div class="user-stat">⏰ <span id="timeLeft">{{ remaining_time }}</span> left</div>
+            </div>
+        </div>
+        
+        <!-- Server Stats Dropdown -->
+        <div class="stats-dropdown">
+            <div class="stats-header" onclick="toggleStats()">
+                <span>📊 Server stats ▼</span>
+            </div>
+            <div class="stats-content" id="statsContent">
+                <div class="system-info-grid">
+                    <div class="info-card"><div class="info-label"> OS</div><div class="info-value" id="osPlatform">Loading...</div></div>
+                    <div class="info-card"><div class="info-label"> Python</div><div class="info-value" id="pythonVersion">Loading...</div></div>
+                    <div class="info-card"><div class="info-label"> Server Time</div><div class="info-value" id="serverTime">Loading...</div></div>
+                    <div class="info-card"><div class="info-label"> Your IP</div><div class="info-value" id="clientIp">Loading...</div></div>
+                    <div class="info-card"><div class="info-label"> Hostname</div><div class="info-value" id="hostname">Loading...</div></div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label"> CPU Usage:</div>
+                        <div class="stat-value" id="cpuStatValue">0% / 100%</div>
+                        <div class="stat-progress"><div class="stat-progress-fill fill-cpu" id="cpuStatFill" style="width: 0%"></div></div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label"> Memory (RAM):</div>
+                        <div class="stat-value" id="ramStatValue">0 MB / {{ ram_allocated }}</div>
+                        <div class="stat-progress"><div class="stat-progress-fill fill-ram" id="ramStatFill" style="width: 0%"></div></div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label"> SSD Storage:</div>
+                        <div class="stat-value" id="diskStatValue">{{ storage_used }} / {{ storage_total }}</div>
+                        <div class="stat-progress"><div class="stat-progress-fill fill-disk" id="diskStatFill" style="width: 0%"></div></div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label"> GPU / Network:</div>
+                        <div class="stat-value" id="processLoadValue">0%</div>
+                        <div class="stat-progress"><div class="stat-progress-fill fill-network" id="processLoadFill" style="width: 0%"></div></div>
+                    </div>
+                </div>
+                
+                <div class="network-stats">
+                    <div class="stat-item">
+                        <div class="stat-label"> Network Inbound:</div>
+                        <div class="stat-value" id="networkInValue">0 MB</div>
+                        <div class="stat-progress"><div class="stat-progress-fill fill-network" id="networkInFill" style="width: 0%"></div></div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label"> Network Outbound:</div>
+                        <div class="stat-value" id="networkOutValue">0 MB</div>
+                        <div class="stat-progress"><div class="stat-progress-fill fill-network" id="networkOutFill" style="width: 0%"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- File Browser -->
+        <div class="file-browser">
+            <div class="breadcrumb">📁 / home / container / <span>{{ server_name }}</span></div>
+            <div id="filesListContainer"></div>
+        </div>
+        
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="upload-box">
+                <input type="file" id="fileInput" multiple accept=".py,.txt,.zip,.json,.html,.css,.js,.md">
+                <label for="fileInput" class="upload-label">📤 Click to upload files</label>
+                <p>Supported: .py, .zip, requirements.txt, .json, .html, .css, .js</p>
+                <span id="uploadMsg" style="color:#2ecc71; font-size:0.65rem; display:block; margin-top:5px;"></span>
+            </div>
+        </div>
+        
+        <!-- Terminal Section -->
+        <div class="terminal-section">
+            <div class="terminal-header">
+                <span>📟 Terminal — <span class="terminal-prompt">root@admin</span></span>
+                <div class="terminal-actions">
+                    <button class="terminal-btn" onclick="clearTerminal()" id="clearLogsBtn">Clear</button>
+                </div>
+            </div>
+            <div class="terminal-log" id="terminalLog">
+                <div class="log-line prompt">┌─[<span class="terminal-prompt">root@admin</span>]</div>
+                <div class="log-line prompt">└──╼ $ Server terminal ready</div>
+                {% for log in logs[:30] %}
+                <div class="log-line {% if 'ERROR' in log %}log-error{% elif 'Success' in log %}log-success{% endif %}">
+                    {% if not 'ERROR' in log and not 'Success' in log %}└─╼ $ {% endif %}{{ log }}
+                </div>
+                {% endfor %}
+                {% if logs|length > 30 %}
+                <div class="log-line prompt">└──╼ $ ... and {{ logs|length - 30 }} more lines</div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Control Buttons -->
+        <div class="control-buttons">
+            <button class="control-btn control-btn-start" onclick="startServer()" id="startBtn">▶️ START</button>
+            <button class="control-btn control-btn-stop" onclick="stopServer()" id="stopBtn">⏹️ STOP</button>
+            <button class="control-btn control-btn-restart" onclick="restartServer()" id="restartBtn">🔄 RESTART</button>
+            <button class="control-btn control-btn-clear" onclick="clearTerminal()" id="clearBtn">🗑️ CLEAR LOGS</button>
+        </div>
+        
+        <div class="footer">
+            <p>𝑽𝑷𝑺 𝑶𝑴𝑨𝑹 ® © 2025 - 2026 &nbsp;|&nbsp; Cloud by <a href="#">𝑽𝑷𝑺 𝑶𝑴𝑨𝑹</a></p>
+        </div>
+    </div>
+    
+    <!-- Edit File Modal -->
+    <div id="editFileModal" class="edit-modal">
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h3>Edit File</h3>
+                <span class="close-modal" onclick="closeEditModal()" style="cursor:pointer; color:#8b9bb0;">&times;</span>
+            </div>
+            <div class="edit-file-name">
+                <input type="text" id="editFileName" placeholder="File name">
+                <button onclick="renameFileFromModal()">Rename</button>
+            </div>
+            <div class="edit-file-content">
+                <textarea id="editFileContent" placeholder="File content..."></textarea>
+            </div>
+            <div class="edit-actions">
+                <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+                <button class="save-btn" onclick="saveFileContent()"> Save</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Regular Modals -->
+    <div id="userInfoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('userInfoModal')">&times;</span>
+            <h3>👤 User Information</h3>
+            <p><strong>Username:</strong> <span id="modalUsername">{{ user }}</span></p>
+            <p><strong>Role:</strong> <span id="modalRole">{{ role }}</span></p>
+            <p><strong>CPU:</strong> <span id="modalCpu">{{ cpu_type }}</span> @ {{ cpu_speed }} GHz</p>
+            <p><strong>RAM:</strong> <span id="modalRam">{{ ram_allocated }}</span></p>
+            <p><strong>SSD Storage:</strong> <span id="modalStorage">{{ storage_total }}</span></p>
+            <p><strong>Expiry:</strong> <span id="modalExpiry">{{ remaining_time }}</span></p>
+        </div>
+    </div>
+    
+    <div id="filesCountModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('filesCountModal')">&times;</span>
+            <h3>📁 My Files</h3>
+            <p><strong>Total Files:</strong> <span id="filesCountValue">0</span></p>
+            <p><strong>Total Size:</strong> <span id="filesSizeValue">0 MB</span></p>
+            <div id="filesListModal" style="max-height: 150px; overflow-y: auto; margin-top: 10px;"></div>
+        </div>
+    </div>
+    
+    <div id="timeLeftModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('timeLeftModal')">&times;</span>
+            <h3>⏰ Account Status</h3>
+            <p><strong>Time Left:</strong> <span id="timeLeftValue">{{ remaining_time }}</span></p>
+            <p><strong>Created At:</strong> <span id="createdAt">Loading...</span></p>
+        </div>
+    </div>
+    
+    <div id="updateCredentialsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('updateCredentialsModal')">&times;</span>
+            <h3>🔐 Update Password</h3>
+            <input type="text" id="newUsername" placeholder="New Username (optional)">
+            <input type="password" id="currentPassword" placeholder="Current Password" required>
+            <input type="password" id="newPassword" placeholder="New Password">
+            <input type="password" id="confirmPassword" placeholder="Confirm New Password">
+            <button onclick="updateCredentials()">Update</button>
+        </div>
+    </div>
+    
+    {% if role == 'admin' %}
+    <div id="adminMonitorModal" class="modal">
+        <div class="modal-content" style="min-width: 400px;">
+            <span class="close-modal" onclick="closeModal('adminMonitorModal')">&times;</span>
+            <h3>📊 Monitor</h3>
+            <div id="adminMonitorContent" style="max-height: 300px; overflow-y: auto;">Loading...</div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <script>
+        const serverId = "{{ server_id }}";
+        const ramAllocated = "{{ ram_allocated }}";
+        const storageTotal = "{{ storage_total }}";
+        const currentUser = "{{ user }}";
+        const userRole = "{{ role }}";
+        let currentEditFile = null;
+        let currentEditServerId = null;
+        
+        function toggleDropdown() {
+            document.getElementById('dropdownMenu').classList.toggle('show');
+        }
+        
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.dropdown');
+            if (dropdown && !dropdown.contains(event.target)) {
+                document.getElementById('dropdownMenu').classList.remove('show');
+            }
+        });
+        
+        function toggleStats() {
+            const statsContent = document.getElementById('statsContent');
+            const header = document.querySelector('.stats-header');
+            statsContent.classList.toggle('show');
+            header.classList.toggle('open');
+        }
+        
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+        
+        function showUserInfo() { showModal('userInfoModal'); }
+        function showUpdateCredentials() { showModal('updateCredentialsModal'); }
+        
+        function showFilesCount() {
+            fetch(`/api/list_files/${serverId}`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('filesCountValue').innerHTML = data.files.length;
+                    let totalSize = data.files.reduce((sum, f) => sum + f.size, 0);
+                    document.getElementById('filesSizeValue').innerHTML = (totalSize / (1024 * 1024)).toFixed(2) + ' MB';
+                    document.getElementById('filesListModal').innerHTML = data.files.map(f => 
+                        `<div style="padding:4px; border-bottom:1px solid #1e2a3a; font-size:0.7rem;">📄 ${f.name} - ${(f.size/1024).toFixed(1)} KB</div>`
+                    ).join('');
+                    showModal('filesCountModal');
+                });
+        }
+        
+        function showTimeLeft() {
+            fetch('/api/system_info')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('createdAt').innerHTML = data.server_time;
+                    showModal('timeLeftModal');
+                });
+        }
+        
+        function updateCredentials() {
+            const newUsername = document.getElementById('newUsername').value;
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            fetch('/api/update_credentials', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: currentUser,
+                    current_password: currentPassword,
+                    new_username: newUsername,
+                    new_password: newPassword
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Updated! Please login again.');
+                    window.location.href = '/logout';
+                } else {
+                    alert('❌ Error: ' + data.error);
+                }
+            });
+        }
+        
+        {% if role == 'admin' %}
+        function showAdminMonitor() {
+            fetch('/api/admin_monitor')
+                .then(res => res.json())
+                .then(data => {
+                    let html = '';
+                    html += '<h4>Users:</h4>';
+                    data.users.forEach(u => {
+                        html += `<div style="padding:6px; border-bottom:1px solid #1e2a3a; font-size:0.7rem;">👤 ${u.username} (${u.role}) - ${u.servers} servers</div>`;
+                    });
+                    html += '<h4 style="margin-top:10px;">Servers:</h4>';
+                    data.servers.forEach(s => {
+                        html += `<div style="padding:6px; border-bottom:1px solid #1e2a3a; font-size:0.7rem;">🖥️ ${s.name} - ${s.owner} - ${s.status}</div>`;
+                    });
+                    document.getElementById('adminMonitorContent').innerHTML = html;
+                    showModal('adminMonitorModal');
+                });
+        }
+        {% endif %}
+        
+        function logout() { window.location.href = '/logout'; }
+        
+        function updateFilesCount() {
+            fetch(`/api/list_files/${serverId}`)
+                .then(res => res.json())
+                .then(data => { document.getElementById('filesCount').innerHTML = data.files.length; });
+        }
+        
+        function updateStatusUI(status) {
+            const statusText = document.getElementById('serverStatusText');
+            if (status === 'running') {
+                statusText.innerHTML = 'ONLINE';
+                statusText.className = 'status-online';
+            } else {
+                statusText.innerHTML = 'OFFLINE';
+                statusText.className = 'status-offline';
+            }
+        }
+        
+        function fetchSystemInfo() {
+            fetch('/api/system_info')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.os_platform) document.getElementById('osPlatform').innerHTML = data.os_platform;
+                    if (data.python_version) document.getElementById('pythonVersion').innerHTML = data.python_version;
+                    if (data.server_time) document.getElementById('serverTime').innerHTML = data.server_time;
+                    if (data.client_ip) document.getElementById('clientIp').innerHTML = data.client_ip;
+                    if (data.uptime) document.getElementById('systemUptime').innerHTML = data.uptime;
+                    if (data.hostname) document.getElementById('hostname').innerHTML = data.hostname;
+                });
+        }
+        
+        function updateStatValue(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            if (element && element.innerText !== newValue) {
+                element.classList.add('updated');
+                setTimeout(() => element.classList.remove('updated'), 300);
+            }
+            if (element) element.innerText = newValue;
+        }
+        
+        function fetchServerDetails() {
+            fetch(`/api/server_details/${serverId}`)
+                .then(res => res.json())
+                .then(data => {
+                    updateStatusUI(data.status);
+                    
+                    const cpuValue = data.cpu_usage || 0;
+                    updateStatValue('cpuStatValue', cpuValue + '% / 100%');
+                    document.getElementById('cpuStatFill').style.width = Math.min(cpuValue, 100) + '%';
+                    
+                    const processLoad = data.process_load || 0;
+                    updateStatValue('processLoadValue', processLoad + '%');
+                    document.getElementById('processLoadFill').style.width = Math.min(processLoad, 100) + '%';
+                    
+                    const ramUsed = data.ram_used || 0;
+                    const ramTotal = data.ram_total || parseInt(ramAllocated.split(' ')[0]);
+                    const ramPercent = ramTotal > 0 ? (ramUsed / ramTotal * 100) : 0;
+                    updateStatValue('ramStatValue', ramUsed + ' MB / ' + ramTotal + ' GB');
+                    document.getElementById('ramStatFill').style.width = Math.min(ramPercent, 100) + '%';
+                    
+                    const diskUsed = data.disk_used || 0;
+                    const diskTotal = data.disk_total_num || 50;
+                    const diskPercent = diskTotal > 0 ? (diskUsed / diskTotal * 100) : 0;
+                    updateStatValue('diskStatValue', diskUsed + ' MB / ' + diskTotal + ' GB');
+                    document.getElementById('diskStatFill').style.width = Math.min(diskPercent, 100) + '%';
+                    
+                    updateStatValue('networkInValue', data.network_in + ' MB');
+                    updateStatValue('networkOutValue', data.network_out + ' MB');
+                    
+                    let networkInPercent = Math.min((data.network_in / 100) * 100, 100);
+                    let networkOutPercent = Math.min((data.network_out / 100) * 100, 100);
+                    document.getElementById('networkInFill').style.width = networkInPercent + '%';
+                    document.getElementById('networkOutFill').style.width = networkOutPercent + '%';
+                    
+                    if (data.logs && data.logs.length > 0) {
+                        const terminal = document.getElementById('terminalLog');
+                        const logsToShow = data.logs.slice(-50);
+                        terminal.innerHTML = `<div class="log-line prompt">┌─[<span class="terminal-prompt">root@admin</span>]</div>
+                            <div class="log-line prompt">└──╼ $ Server logs:</div>` + 
+                            logsToShow.map(log => {
+                                const isError = log.includes('ERROR');
+                                const isSuccess = log.includes('Success') || log.includes('started') || log.includes('Started');
+                                return `<div class="log-line ${isError ? 'log-error' : isSuccess ? 'log-success' : ''}">
+                                    ${isError || isSuccess ? log : '└─╼ $ ' + log}
+                                </div>`;
+                            }).join('');
+                        if (data.logs.length > 50) {
+                            terminal.innerHTML += `<div class="log-line prompt">└──╼ $ ... and ${data.logs.length - 50} more lines</div>`;
+                        }
+                        terminal.scrollTop = terminal.scrollHeight;
+                    }
+                });
+        }
+        
+        // ========== FILE MANAGEMENT FUNCTIONS ==========
+        
+        function toggleFileMenu(event, filename) {
+            event.stopPropagation();
+            const menuId = 'menu_' + filename.replace(/[^a-zA-Z0-9]/g, '_');
+            const menu = document.getElementById(menuId);
+            
+            document.querySelectorAll('.file-dropdown').forEach(m => {
+                if (m.id !== menuId) m.classList.remove('show');
+            });
+            
+            if (menu) menu.classList.toggle('show');
+        }
+        
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.file-dropdown').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        });
+        
+        function editFileContent(filename) {
+            fetch(`/api/get_file_content/${serverId}/${encodeURIComponent(filename)}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.content !== undefined) {
+                        openEditModal(filename, data.content);
+                    } else {
+                        alert('❌ Failed to load file content');
+                    }
+                });
+        }
+        
+        function renameFilePrompt(filename) {
+            const newName = prompt('✏️ Rename file:', filename);
+            if (newName && newName !== filename) {
+                fetch(`/api/rename_file/${serverId}/${encodeURIComponent(filename)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ new_name: newName })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('✅ File renamed successfully!');
+                        refreshFiles();
+                        fetchServerDetails();
+                    } else {
+                        alert('❌ Failed to rename: ' + (data.error || 'Unknown error'));
+                    }
+                });
+            }
+        }
+        
+        function downloadFile(filename) {
+            window.open(`/api/download_file/${serverId}/${encodeURIComponent(filename)}`, '_blank');
+        }
+        
+        function deleteFileConfirm(filename) {
+            if(confirm(`⚠️ Delete "${filename}"?\n\nThis action cannot be undone!`)) {
+                fetch(`/api/delete_file/${serverId}/${encodeURIComponent(filename)}`, {method: 'DELETE'})
+                    .then(() => { 
+                        refreshFiles(); 
+                        fetchServerDetails();
+                        document.getElementById('uploadMsg').textContent = '✅ File deleted successfully!';
+                        setTimeout(() => document.getElementById('uploadMsg').textContent = '', 3000);
+                    });
+            }
+        }
+        
+        function openEditModal(filename, content) {
+            currentEditFile = filename;
+            currentEditServerId = serverId;
+            document.getElementById('editFileName').value = filename;
+            document.getElementById('editFileContent').value = content;
+            document.getElementById('editFileModal').classList.add('show');
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editFileModal').classList.remove('show');
+            currentEditFile = null;
+        }
+        
+        function saveFileContent() {
+            const newContent = document.getElementById('editFileContent').value;
+            
+            fetch(`/api/save_file/${currentEditServerId}/${encodeURIComponent(currentEditFile)}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: newContent })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ File saved successfully!');
+                    closeEditModal();
+                    refreshFiles();
+                    fetchServerDetails();
+                } else {
+                    alert('❌ Failed to save file: ' + (data.error || 'Unknown error'));
+                }
+            });
+        }
+        
+        function renameFileFromModal() {
+            const newName = document.getElementById('editFileName').value;
+            if (!newName || newName === currentEditFile) {
+                closeEditModal();
+                return;
+            }
+            
+            fetch(`/api/rename_file/${currentEditServerId}/${encodeURIComponent(currentEditFile)}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ new_name: newName })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ File renamed successfully!');
+                    currentEditFile = newName;
+                    document.getElementById('editFileName').value = newName;
+                    refreshFiles();
+                    fetchServerDetails();
+                } else {
+                    alert('❌ Failed to rename file: ' + (data.error || 'Unknown error'));
+                }
+            });
+        }
+        
+        function refreshFiles() {
+            fetch(`/api/list_files/${serverId}`)
+                .then(res => res.json())
+                .then(data => {
+                    const container = document.getElementById('filesListContainer');
+                    if (data.files && data.files.length > 0) {
+                        container.innerHTML = `
+                            <div style="background:#161b22; border-radius:8px; border:1px solid #1e2a3a;">
+                                <div style="padding:8px 12px; border-bottom:1px solid #1e2a3a; color:#8b9bb0; font-size:0.7rem; font-weight:500;">
+                                    📄 FILES (${data.files.length})
+                                </div>
+                                <div id="filesList" style="max-height:250px; overflow-y:auto;"></div>
+                            </div>
+                        `;
+                        const filesDiv = document.getElementById('filesList');
+                        filesDiv.innerHTML = data.files.map(f => {
+                            let icon = '📁';
+                            if (f.name.endsWith('.py')) icon = '📁';
+                            else if (f.name.endsWith('.zip')) icon = '📁';
+                            else if (f.name.endsWith('.txt')) icon = '📁';
+                            else if (f.name.includes('requirements')) icon = '📋';
+                            
+                            const sizeKB = (f.size / 1024).toFixed(1);
+                            const safeName = f.name.replace(/[^a-zA-Z0-9]/g, '_');
+                            
+                            return `
+                                <div class="file-item" style="display:flex; justify-content:space-between; align-items:center; padding:8px 12px; border-bottom:1px solid #1e2a3a;">
+                                    <div style="display:flex; align-items:center; gap:10px;">
+                                        <span style="font-size:0.9rem;">${icon}</span>
+                                        <span style="color:#00ffaa; font-size:0.75rem;">${escapeHtml(f.name)}</span>
+                                        <span style="color:#8b9bb0; font-size:0.65rem;">${sizeKB} KB</span>
+                                    </div>
+                                    <div class="file-menu" style="position:relative;">
+                                        <button class="file-menu-btn" onclick="toggleFileMenu(event, '${escapeHtml(f.name)}')">⋮</button>
+                                        <div class="file-dropdown" id="menu_${safeName}">
+                                            <div class="file-dropdown-item" onclick="editFileContent('${escapeHtml(f.name)}')">
+                                                <span class="icon"></span> Edit
+                                            </div>
+                                            <div class="file-dropdown-item" onclick="renameFilePrompt('${escapeHtml(f.name)}')">
+                                                <span class="icon"></span> Rename
+                                            </div>
+                                            <div class="file-dropdown-divider"></div>
+                                            <div class="file-dropdown-item" onclick="downloadFile('${escapeHtml(f.name)}')">
+                                                <span class="icon"></span> Download
+                                            </div>
+                                            <div class="file-dropdown-item" onclick="deleteFileConfirm('${escapeHtml(f.name)}')">
+                                                <span class="icon"></span> Delete
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        container.innerHTML = `<div class="directory-empty"><div class="icon">📁</div><p>This directory seems to be empty.</p></div>`;
+                    }
+                    updateFilesCount();
+                });
+        }
+        
+        function clearTerminal() {
+            fetch(`/api/clear_logs/${serverId}`, {method: 'POST'})
+                .then(() => {
+                    fetchServerDetails();
+                    const msg = document.getElementById('uploadMsg');
+                    msg.textContent = '✅ Terminal logs cleared successfully!';
+                    setTimeout(() => msg.textContent = '', 3000);
+                })
+                .catch(err => {
+                    console.error('Clear logs error:', err);
+                    document.getElementById('uploadMsg').textContent = '❌ Failed to clear logs!';
+                    setTimeout(() => document.getElementById('uploadMsg').textContent = '', 3000);
+                });
+        }
+        
+        function startServer() {
+            const btn = document.getElementById('startBtn');
+            btn.innerHTML = '⏳ STARTING...';
+            btn.disabled = true;
+            
+            fetch(`/api/start_server/${serverId}`, {method: 'POST'})
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('uploadMsg').textContent = '✅ ' + (data.message || 'Server started!');
+                    setTimeout(() => {
+                        fetchServerDetails();
+                        btn.innerHTML = '▶️ START';
+                        btn.disabled = false;
+                        setTimeout(() => document.getElementById('uploadMsg').textContent = '', 3000);
+                    }, 1500);
+                })
+                .catch(err => {
+                    btn.innerHTML = '▶️ START';
+                    btn.disabled = false;
+                    document.getElementById('uploadMsg').textContent = '❌ Failed to start server!';
+                    setTimeout(() => document.getElementById('uploadMsg').textContent = '', 3000);
+                });
+        }
+        
+        function stopServer() {
+            const btn = document.getElementById('stopBtn');
+            btn.innerHTML = '⏳ STOPPING...';
+            btn.disabled = true;
+            
+            fetch(`/api/stop_server/${serverId}`, {method: 'POST'})
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('uploadMsg').textContent = '✅ ' + (data.message || 'Server stopped!');
+                    fetchServerDetails();
+                    btn.innerHTML = '⏹️ STOP';
+                    btn.disabled = false;
+                    setTimeout(() => document.getElementById('uploadMsg').textContent = '', 3000);
+                })
+                .catch(err => {
+                    btn.innerHTML = '⏹️ STOP';
+                    btn.disabled = false;
+                    document.getElementById('uploadMsg').textContent = '❌ Failed to stop server!';
+                    setTimeout(() => document.getElementById('uploadMsg').textContent = '', 3000);
+                });
+        }
+        
+        function restartServer() {
+            const btn = document.getElementById('restartBtn');
+            btn.innerHTML = '⏳ RESTARTING...';
+            btn.disabled = true;
+            
+            fetch(`/api/restart_server/${serverId}`, {method: 'POST'})
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('uploadMsg').textContent = '✅ ' + (data.message || 'Server restarting!');
+                    setTimeout(() => {
+                        fetchServerDetails();
+                        btn.innerHTML = '🔄 RESTART';
+                        btn.disabled = false;
+                        setTimeout(() => document.getElementById('uploadMsg').textContent = '', 3000);
+                    }, 2000);
+                })
+                .catch(err => {
+                    btn.innerHTML = '🔄 RESTART';
+                    btn.disabled = false;
+                    document.getElementById('uploadMsg').textContent = '❌ Failed to restart server!';
+                    setTimeout(() => document.getElementById('uploadMsg').textContent = '', 3000);
+                });
+        }
+        
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            document.getElementById('uploadMsg').textContent = '⏳ Uploading...';
+            
+            fetch(`/api/upload_file/${serverId}`, {method: 'POST', body: formData})
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('uploadMsg').textContent = '✅ ' + (data.message || 'Uploaded!');
+                    } else {
+                        document.getElementById('uploadMsg').textContent = '❌ ' + (data.error || 'Upload failed!');
+                    }
+                    setTimeout(() => document.getElementById('uploadMsg').textContent = '', 3000);
+                    refreshFiles();
+                    fetchServerDetails();
+                    document.getElementById('fileInput').value = '';
+                })
+                .catch(err => {
+                    document.getElementById('uploadMsg').textContent = '❌ Upload failed!';
+                    setTimeout(() => document.getElementById('uploadMsg').textContent = '', 3000);
+                });
+        });
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        fetchSystemInfo();
+        refreshFiles();
+        fetchServerDetails();
+        
+        setInterval(fetchServerDetails, 3000);
+        setInterval(refreshFiles, 5000);
+        setInterval(fetchSystemInfo, 10000);
+    </script>
+</body>
+</html>

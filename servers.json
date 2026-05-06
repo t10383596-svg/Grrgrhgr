@@ -1,0 +1,33 @@
+{
+    "a11541f9": {
+        "owner": "xza123",
+        "name": "Open",
+        "status": "stopped",
+        "pid": 5443,
+        "logs": [
+            "[Tue May  5 22:23:09 2026] Uploaded: file (1).py",
+            "[Tue May  5 22:23:09 2026] Python: file (1).py"
+        ],
+        "cpu_type": "Admin - Snapdragon",
+        "ram": "33 GB",
+        "storage": "258 GB",
+        "cores": 2,
+        "current_storage_used": 0.0,
+        "created_at": "2026-05-05T21:31:39.172298"
+    },
+    "d85bb10e": {
+        "owner": "OMAR_ADMIN",
+        "name": "OMAR",
+        "status": "stopped",
+        "pid": null,
+        "logs": [
+            "[Wed May  6 13:02:55 2026] Server created"
+        ],
+        "cpu_type": "Admin - Snapdragon",
+        "ram": "33 GB",
+        "storage": "258 GB",
+        "cores": 2,
+        "current_storage_used": 0,
+        "created_at": "2026-05-06T13:02:55.028869"
+    }
+}

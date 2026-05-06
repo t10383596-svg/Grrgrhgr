@@ -1,0 +1,18 @@
+{
+    "xza123": {
+        "password": "xza",
+        "role": "admin",
+        "ram": "33 GB",
+        "storage": "258 GB",
+        "cpu": "Admin - Snapdragon",
+        "expiry": "Unlimited"
+    },
+    "OMAR_ADMIN": {
+        "password": "OMAR_2026_BRO",
+        "role": "admin",
+        "ram": "33 GB",
+        "storage": "258 GB",
+        "cpu": "Admin - Snapdragon",
+        "expiry": "Unlimited"
+    }
+}
